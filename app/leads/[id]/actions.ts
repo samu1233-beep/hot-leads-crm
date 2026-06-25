@@ -1,24 +1,26 @@
-"use server";
-import { revalidatePath } from 'next/cache';
+'use server';
 import { prisma } from '@/lib/prisma';
-import { priorityFromHeat, statusFromHeat } from '@/lib/heat';
+import { redirect } from 'next/navigation';
+import { statusFromHeat, priorityFromHeat } from '@/lib/heat';
 
 export async function updateLead(formData: FormData) {
-  const id = String(formData.get('id') || '');
-  const notes = String(formData.get('notes') || '');
-  const heat = Number(formData.get('heat'));
-  if (!id || !Number.isFinite(heat)) return;
-
+  const id = formData.get('id') as string;
+  const heat = Math.max(1, Math.min(10, parseInt(formData.get('heat') as string) || 5));
   await prisma.lead.update({
     where: { id },
     data: {
-      notes,
+      company: formData.get('company') as string,
+      contactName: formData.get('contactName') as string,
+      emailOrPhone: formData.get('emailOrPhone') as string,
+      lastContactAt: formData.get('lastContactAt') as string,
+      actions: formData.get('actions') as string,
+      resultComment: formData.get('resultComment') as string,
+      nextActions: formData.get('nextActions') as string,
+      notes: formData.get('notes') as string,
       heat,
       status: statusFromHeat(heat),
-      priority: priorityFromHeat(heat)
-    }
+      priority: priorityFromHeat(heat),
+    },
   });
-
-  revalidatePath('/');
-  revalidatePath('/leads/' + id);
+  redirect('/');
 }
