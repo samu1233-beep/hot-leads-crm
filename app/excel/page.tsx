@@ -14,7 +14,7 @@ export default function ExcelPage() {
         </div>
       </div>
       {names.map((name) => {
-        const rows = (workbookSheets as Record<string, Array<Array<string | number>>>)[name];
+        const rows = (workbookSheets as unknown as Record<string, Array<Array<string | number>>>)[name];
         const nonEmpty = rows.filter((r) => r.some((v) => String(v ?? '').trim() !== '')).slice(0, 40);
         return (
           <div key={name} className="card" style={{ marginBottom: 16 }}>
