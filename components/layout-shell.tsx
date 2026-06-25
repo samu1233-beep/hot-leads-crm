@@ -7,7 +7,7 @@ export function LayoutShell({ title, subtitle, children }: { title: string; subt
         <div>
           <div className="brandWrap">
             <div className="logoBox">
-              <embed src="/upek_logo.pdf" type="application/pdf" />
+              <img src="/upek_logo.jpg" alt="Upek logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <div>
               <div className="title">{title}</div>
